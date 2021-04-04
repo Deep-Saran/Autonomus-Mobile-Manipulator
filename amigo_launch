@@ -1,0 +1,24 @@
+roslaunch amigo_real amigo_real.launch robot_ip:=/dev/ttyUSB0
+
+
+commands
+roslaunch amigo_real octomap.launch
+ roslaunch husky_navigation move_base_mapless_demo.launch
+rosrun depthimage_to_laserscan depthimage_to_laserscan image:=/camera/depth/image_raw
+roslaunch amigo_real amigo_real.launch robot_ip:=amigo4.rit.edu
+roslaunch openni2_launch openni2.launch
+rosrun ORB_SLAM2 RGBD Vocabulary/ORBvoc.txt Examples/RGB-D/TUM1.yaml
+
+
+
+rosrun octomap_server octomap_saver -f map1.bt
+
+
+
+rosrun map_server map_saver -f map map:=projected_map
+rosrun map_server map_saver -f map2 map:=move_base/global_costmap/costmap
+rosrun map_server map_saver -f map1 map:=move_base/local_costmap/costmap
+
+
+octovis map1.bt
+v
